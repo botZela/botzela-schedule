@@ -1,6 +1,7 @@
 use routes::router;
 
 mod routes;
+mod structs;
 
 #[tokio::main]
 async fn main() {
