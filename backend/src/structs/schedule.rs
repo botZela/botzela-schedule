@@ -1,3 +1,5 @@
+use crate::routes::schedule::PostParams;
+use mongodb::{bson::doc, Database};
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 
@@ -30,14 +32,30 @@ impl Schedule {
                     r.into_iter()
                         .zip(l.into_iter())
                         .map(|(x, y)| match (x, y) {
-                            (Some(t), None) | (None, Some(t)) => Some(t),
-                            (Some(t), Some(_)) => Some(t),
+                            (Some(t), None | Some(_)) | (None, Some(t)) => Some(t),
                             _ => None,
                         })
                         .collect()
                 })
                 .collect(),
             ..self
+        }
+    }
+
+    pub async fn fetch(database: &Database, payload: &PostParams) -> Option<Schedule> {
+        let collection = database.collection::<Schedule>("ensias-schedules");
+
+        let filter =
+            doc! { "year": &payload.year, "filiere": &payload.filiere, "week": &payload.week};
+        let fl = collection.find_one(filter, None).await.unwrap_or(None);
+
+        let filter =
+            doc! { "year": &payload.year, "filiere": &payload.groupe, "week": &payload.week};
+        let grp = collection.find_one(filter, None).await.unwrap_or(None);
+
+        match (fl, grp) {
+            (Some(fl), Some(grp)) => Some(fl.merge(grp)),
+            _ => None,
         }
     }
 }
