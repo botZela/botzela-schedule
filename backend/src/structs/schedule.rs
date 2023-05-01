@@ -1,28 +1,13 @@
-use crate::routes::schedule::PostParams;
+use common::schedule::{PostParams, Schedule, Seance};
 use mongodb::{bson::doc, Database};
 use regex::Regex;
-use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct Seance {
-    pub class: String,
-    pub name: String,
-    pub module_num: Option<i32>,
-    pub professor: Option<String>,
-    #[serde(alias = "otherFilieres")]
-    pub other_filieres: Vec<String>,
+trait Merge {
+    fn merge(self, second: Self) -> Self;
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct Schedule {
-    pub year: String,
-    pub filiere: String,
-    pub week: Option<String>,
-    pub days: Vec<Vec<Option<Seance>>>,
-}
-
-impl Schedule {
-    pub fn merge(self, second: Self) -> Self {
+impl Merge for Schedule {
+    fn merge(self, second: Self) -> Self {
         Self {
             days: self
                 .days
@@ -41,22 +26,20 @@ impl Schedule {
             ..self
         }
     }
+}
 
-    pub async fn fetch(database: &Database, payload: &PostParams) -> Option<Schedule> {
-        let collection = database.collection::<Schedule>("ensias-schedules");
+pub async fn fetch(database: &Database, payload: &PostParams) -> Option<Schedule> {
+    let collection = database.collection::<Schedule>("ensias-schedules");
 
-        let filter =
-            doc! { "year": &payload.year, "filiere": &payload.filiere, "week": &payload.week};
-        let fl = collection.find_one(filter, None).await.unwrap_or(None);
+    let filter = doc! { "year": &payload.year, "filiere": &payload.filiere, "week": &payload.week};
+    let fl = collection.find_one(filter, None).await.unwrap_or(None);
 
-        let filter =
-            doc! { "year": &payload.year, "filiere": &payload.groupe, "week": &payload.week};
-        let grp = collection.find_one(filter, None).await.unwrap_or(None);
+    let filter = doc! { "year": &payload.year, "filiere": &payload.groupe, "week": &payload.week};
+    let grp = collection.find_one(filter, None).await.unwrap_or(None);
 
-        match (fl, grp) {
-            (Some(fl), Some(grp)) => Some(fl.merge(grp)),
-            _ => None,
-        }
+    match (fl, grp) {
+        (Some(fl), Some(grp)) => Some(fl.merge(grp)),
+        _ => None,
     }
 }
 

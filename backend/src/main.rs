@@ -18,6 +18,7 @@ async fn main() {
     let app = router(database);
 
     let addr = "[::]:8080".parse().unwrap();
+    tracing::debug!("listening on {}", addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
