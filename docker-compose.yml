@@ -1,0 +1,21 @@
+version: '3'
+services:
+  botzela-schedule:
+    build:
+      context: .
+    container_name: botzela-schedule
+    image: botzela-schedule
+    environment:
+      MONGO_URI: mongodb://root:example@mongodb:27017/?authSource=admin
+    ports:
+      - '8080:8080'
+
+  mongodb:
+    image: mongo:5.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./db/data/mongoDB:/data/db
+    ports:
+      - 27017:27017
