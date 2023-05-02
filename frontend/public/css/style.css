@@ -1,0 +1,134 @@
+.container {
+	margin: auto;
+	width: 1300px;
+	text-align: center;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	overflow: hidden;
+}
+
+img {
+	width: 150px;
+}
+
+.header {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	padding: 40px;
+}
+
+.header p {
+	width: 500px;
+}
+
+table {
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+table td,
+th {
+	border: 1px solid black;
+}
+
+.filiere,
+.class,
+.day-name {
+	font-size: 20px;
+	width: 50px;
+}
+
+.filiere {
+	background-color: #1d4ed8;
+	color: white;
+}
+
+.class {
+	background-color: #38bdf8;
+	text-transform: capitalize;
+}
+
+.matiere {
+	width: 500px;
+}
+
+.delimiter {
+	width: 10px;
+	background-color: red;
+}
+
+th.matiere {
+	background-color: #3b82f6;
+	color: white;
+	font-size: 20px;
+}
+
+th.filiere,
+th.class {
+	font-size: 15px;
+}
+
+td.filiere,
+td.class,
+td.day-name {
+	padding: 10px 10px;
+	writing-mode: vertical-rl;
+	transform: rotate(180deg);
+}
+
+td.matiere {
+	text-align: center;
+	vertical-align: middle;
+	white-space: pre-wrap;
+	font-size: 18px;
+	padding: 10px 10px;
+	background-color: #f0f9ff;
+	font-weight: bold;
+}
+
+td.day-name {
+	background-color: #bfdbfe;
+}
+
+th.day-name {
+	border: none;
+}
+
+.day {
+	height: auto;
+}
+
+.matiere[data-module='1'] {
+	color: red;
+}
+
+.matiere[data-module='2'] {
+	color: green;
+}
+
+.matiere[data-module='3'] {
+	color: blue;
+}
+
+.matiere[data-module='4'] {
+	color: orange;
+}
+
+.matiere[data-module='5'] {
+	color: cadetblue;
+}
+
+.matiere[data-module='6'] {
+	color: purple;
+}
+
+.matiere[data-module='7'] {
+	color: yellowgreen;
+}
+
+.matiere[data-module='empty'] {
+	background-color: #d6d3d1 !important;
+}
+
+.empty {
+	background-color: #d6d3d1 !important;
+}

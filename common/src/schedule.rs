@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug, Clone)]
 pub struct PostParams {
     pub year: String,
     pub filiere: String,
