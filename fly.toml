@@ -1,0 +1,13 @@
+# fly.toml app configuration file generated for botzela-schedule on 2023-04-30T13:02:48+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "botzela-schedule"
+primary_region = "cdg"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
