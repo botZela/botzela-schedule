@@ -22,7 +22,7 @@ pub fn router(database: mongodb::Database) -> Router {
     Router::new()
         .route("/hello", get(root::root))
         .nest_service("/", ServeDir::new("dist"))
-        .route("/schedule", post(schedule::post))
+        .route("/api/schedule", post(schedule::post))
         .with_state(database)
         .layer(TraceLayer::new_for_http())
 }

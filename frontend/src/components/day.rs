@@ -12,21 +12,22 @@ pub fn Day(cx: Scope, day: &'static str, seances: Vec<Option<Seance>>) -> impl I
 
     view! { cx,
         <tr class="day">
-            <td class="day-name"><b>{day}</b></td>
-
-            <Show when=move || SHOW_BRANCH fallback=|_| view!{ cx, } >
+            <td class="day-name">
+                <b>{day}</b>
+            </td>
+            <Show
+                when=move || SHOW_BRANCH
+                fallback=|_| {
+                    view! { cx,  }
+                }
+            >
                 <td class="filiere">"SSI"</td>
             </Show>
-
-            <Session session=session1 />
-
-            <Session session=session2 />
-
+            <Session session=session1/>
+            <Session session=session2/>
             <td class="delimiter"></td>
-
-            <Session session=session3 />
-
-            <Session session=session4 />
+            <Session session=session3/>
+            <Session session=session4/>
         </tr>
     }
 }

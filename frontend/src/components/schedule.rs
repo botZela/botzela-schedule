@@ -9,7 +9,7 @@ use leptos::*;
 async fn fetch_schedule(body: schedule::PostParams) -> Option<Vec<Vec<Option<Seance>>>> {
     let json_body = serde_json::to_string(&body).expect("msg");
 
-    let res = gloo_net::http::Request::post("/schedule")
+    let res = gloo_net::http::Request::post("/api/schedule")
         .header("content-type", "application/json")
         .body(json_body)
         .send()
@@ -60,32 +60,55 @@ pub fn Schedule(cx: Scope) -> impl IntoView {
 
     view! { cx,
         <div class="container">
-            <Header  header_args=schedule_body/>
+            <Header header_args=schedule_body/>
             <form on:submit=on_submit>
                 <select name="Filiere" id="filiere" node_ref=select_element_fl>
-                    { fl_vec
+                    {fl_vec
                         .iter()
-                        .map(|&fl| view!{ cx, <option value={fl}>{fl}</option>})
+                        .map(|&fl| {
+                            view! { cx,
+                                <option value=fl selected=schedule_body.get().filiere == fl.to_string()>
+                                    {fl}
+                                </option>
+                            }
+                        })
                         .collect::<Vec<_>>()}
                 </select>
                 <select name="Groupe" id="group" node_ref=select_element_grp>
-                    { grp_vec
+                    {grp_vec
                         .iter()
-                        .map(|&grp| view!{ cx, <option value={grp}>{grp}</option>})
+                        .map(|&grp| {
+                            view! { cx,
+                                <option value=grp selected=schedule_body.get().groupe == grp.to_string()>
+                                    {grp}
+                                </option>
+                            }
+                        })
                         .collect::<Vec<_>>()}
                 </select>
                 <input type="submit" value="Submit"/>
             </form>
-            <Suspense fallback=|| view! { cx, "Loading..." }>
-            { move || match once.read(cx) {
-                None => view! { cx, <p>"Loading..."</p> }.into_view(cx),
-                Some(data) => {
-                    match data {
-                        Some(days) => { view! { cx, <Week days /> }.into_view(cx) },
-                        None => {view! { cx, "Not Found"}.into_view(cx)}
+            <Suspense fallback=|| {
+                view! { cx, "Loading..." }
+            }>
+                {move || match once.read(cx) {
+                    None => {
+                        view! { cx, <p>"Loading..."</p> }
+                            .into_view(cx)
                     }
-                }
-            }}
+                    Some(data) => {
+                        match data {
+                            Some(days) => {
+                                view! { cx, <Week days/> }
+                                    .into_view(cx)
+                            }
+                            None => {
+                                view! { cx, "Not Found" }
+                                    .into_view(cx)
+                            }
+                        }
+                    }
+                }}
             </Suspense>
         </div>
     }
