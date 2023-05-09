@@ -1,4 +1,3 @@
 [workspace]
 members = ["backend", "common", "frontend"]
 default-members = ["backend"]
-

@@ -36,23 +36,23 @@ pub fn Week(cx: Scope, days: Vec<Vec<Option<Seance>>>) -> impl IntoView {
     let days_view: Vec<_> = days_name
         .iter()
         .zip(days.iter())
-        .map(|(&day, &ref seances)| view! { cx, <Day day seances=seances.clone()/> })
+        .map(|(&day, seances)| view! { cx, <Day day seances=seances.clone()/> })
         .collect();
 
     view! { cx,
         <div class="body">
-            <table>
-                {if days_view.len() == 0 {
-                    view! { cx, <p ce>"Not Found"</p> }
-                        .into_view(cx)
-                } else {
-                    view! { cx,
+            {if days_view.is_empty() {
+                view! { cx, "Not Found" }
+                    .into_view(cx)
+            } else {
+                view! { cx,
+                    <table>
                         <WeekHeader/>
                         {days_view}
-                    }
-                        .into_view(cx)
-                }}
-            </table>
+                    </table>
+                }
+                    .into_view(cx)
+            }}
         </div>
     }
 }
