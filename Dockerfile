@@ -11,7 +11,7 @@ COPY . .
 RUN cargo chef prepare --recipe-path recipe.json
 
 
-# stage 2 - 1
+# stage 2 
 FROM base as cacher
 COPY --from=planner /app/recipe.json /app/recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json && \
