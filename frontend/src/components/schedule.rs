@@ -12,10 +12,10 @@ pub fn Schedule(cx: Scope) -> impl IntoView {
     let body = move || {
         params.with(|params| {
             params.clone().unwrap_or(schedule::PostParams {
-                year: "1A".to_owned(),
-                filiere: "2IA".to_owned(),
-                groupe: "G1".to_owned(),
-                week: "S22".to_owned(),
+                year: Some("1A".to_owned()),
+                filiere: Some("2IA".to_owned()),
+                groupe: Some("G1".to_owned()),
+                week: Some("S22".to_owned()),
             })
         })
     };

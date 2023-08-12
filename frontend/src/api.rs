@@ -7,6 +7,7 @@ pub async fn fetch_schedule(body: schedule::PostParams) -> Option<Vec<Vec<Option
     let res = gloo_net::http::Request::post("/api/schedule")
         .header("content-type", "application/json")
         .body(json_body)
+        .expect("a JSON Body")
         .send()
         .await
         .map_err(|e| log!("{e}"))

@@ -9,10 +9,10 @@ pub fn Header(cx: Scope) -> impl IntoView {
     let body = move || {
         params.with(|params| {
             params.clone().unwrap_or(schedule::PostParams {
-                year: "1A".to_owned(),
-                week: "S22".to_owned(),
-                groupe: "G1".to_owned(),
-                filiere: "2IA".to_owned(),
+                year: Some("1A".to_owned()),
+                week: Some("S22".to_owned()),
+                groupe: Some("G1".to_owned()),
+                filiere: Some("2IA".to_owned()),
             })
         })
     };
@@ -41,7 +41,7 @@ pub fn Header(cx: Scope) -> impl IntoView {
                                 .iter()
                                 .map(|&year| {
                                     view! { cx,
-                                        <option value=year selected=move || body().year == year.to_string()>
+                                        <option value=year selected=move || body().year == Some(year.to_string())>
                                             {year}
                                         </option>
                                     }
@@ -53,7 +53,7 @@ pub fn Header(cx: Scope) -> impl IntoView {
                                 .iter()
                                 .map(|&fl| {
                                     view! { cx,
-                                        <option value=fl selected=move || body().filiere == fl.to_string()>
+                                        <option value=fl selected=move || body().filiere == Some(fl.to_string())>
                                             {fl}
                                         </option>
                                     }
@@ -65,7 +65,7 @@ pub fn Header(cx: Scope) -> impl IntoView {
                                 .iter()
                                 .map(|&grp| {
                                     view! { cx,
-                                        <option value=grp selected=move || body().groupe == grp.to_string()>
+                                        <option value=grp selected=move || body().groupe == Some(grp.to_string())>
                                             {grp}
                                         </option>
                                     }
@@ -77,7 +77,7 @@ pub fn Header(cx: Scope) -> impl IntoView {
                                 .iter()
                                 .map(|&week| {
                                     view! { cx,
-                                        <option value=week selected=move || body().week == week.to_string()>
+                                        <option value=week selected=move || body().week == Some(week.to_string())>
                                             {week}
                                         </option>
                                     }

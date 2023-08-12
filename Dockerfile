@@ -1,5 +1,5 @@
 # create base
-FROM rust:1.69-bullseye as base
+FROM rust:bullseye as base
 RUN rustup default nightly
 RUN rustup target add wasm32-unknown-unknown
 WORKDIR /app
@@ -15,26 +15,27 @@ RUN cargo chef prepare --recipe-path recipe.json
 FROM base as cacher
 COPY --from=planner /app/recipe.json /app/recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json && \
-    cargo chef cook --release -p front_schedule_leptos --target wasm32-unknown-unknown
+  cargo chef cook --release -p front_schedule_leptos --target wasm32-unknown-unknown
 
 # stage 3
-FROM rust:1.69-bullseye as builder
+FROM rust:bullseye as builder
 
 RUN rustup default nightly
 RUN rustup target add wasm32-unknown-unknown
 RUN cargo install trunk 
+RUN cargo install wasm-bindgen-cli
 
 ENV USER=web
 ENV UID=1001
 
 RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    "${USER}"
+  --disabled-password \
+  --gecos "" \
+  --home "/nonexistent" \
+  --shell "/sbin/nologin" \
+  --no-create-home \
+  --uid "${UID}" \
+  "${USER}"
 
 
 # change the working directory
@@ -47,6 +48,7 @@ COPY --from=cacher /app/target target
 COPY --from=cacher /usr/local/cargo /usr/local/cargo
 
 # build the app
+ARG CLIENT_DIST=""
 RUN cargo build --release
 RUN cd frontend && trunk build --release
 
@@ -66,4 +68,5 @@ WORKDIR /app
 USER web:web
 
 # start the application
+ARG CLIENT_DIST=/app/dist
 CMD ["./backend"]

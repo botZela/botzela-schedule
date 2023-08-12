@@ -4,10 +4,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, PartialEq, Debug, Clone, Params)]
 pub struct PostParams {
-    pub year: String,
-    pub filiere: String,
-    pub groupe: String,
-    pub week: String,
+    pub year: Option<String>,
+    pub filiere: Option<String>,
+    pub groupe: Option<String>,
+    pub week: Option<String>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
