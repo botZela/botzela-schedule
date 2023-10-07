@@ -4,16 +4,17 @@ use common::schedule::Seance;
 use leptos::*;
 
 #[component]
-fn WeekHeader(cx: Scope) -> impl IntoView {
-    view! { cx,
+fn WeekHeader() -> impl IntoView {
+    view! {
         <tr>
             <th class="jour"></th>
             <Show
                 when=move || SHOW_BRANCH
-                fallback=|_| {
-                    view! { cx,  }
+                fallback=|| {
+                    view! {}
                 }
             >
+
                 <th class="filiere">"Filière"</th>
             </Show>
             <th class="class">"Class"</th>
@@ -30,29 +31,29 @@ fn WeekHeader(cx: Scope) -> impl IntoView {
 }
 
 #[component]
-pub fn Week(cx: Scope, days: Vec<Vec<Option<Seance>>>) -> impl IntoView {
+pub fn Week(days: Vec<Vec<Option<Seance>>>) -> impl IntoView {
     let days_name = vec!["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
 
     let days_view: Vec<_> = days_name
         .iter()
         .zip(days.iter())
-        .map(|(&day, seances)| view! { cx, <Day day seances=seances.clone()/> })
+        .map(|(&day, seances)| view! { <Day day seances=seances.clone()/> })
         .collect();
 
-    view! { cx,
+    view! {
         <div class="body">
             {if days_view.is_empty() {
-                view! { cx, "Not Found" }
-                    .into_view(cx)
+                view! { "Not Found" }.into_view()
             } else {
-                view! { cx,
+                view! {
                     <table>
                         <WeekHeader/>
                         {days_view}
                     </table>
                 }
-                    .into_view(cx)
+                    .into_view()
             }}
+
         </div>
     }
 }

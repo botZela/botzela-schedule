@@ -1,29 +1,32 @@
 mod api;
 mod components;
-use components::schedule::*;
+use components::notfound::NotFound;
+use components::schedule::Schedule;
 use leptos::*;
 use leptos_router::*;
 
 pub const SHOW_BRANCH: bool = false;
 
 #[component]
-pub fn App(cx: Scope) -> impl IntoView {
-    view! { cx,
+pub fn App() -> impl IntoView {
+    view! {
         <Router>
             <main>
                 <Routes>
                     <Route
                         path="/"
-                        view=|cx| {
-                            view! { cx, <Schedule/> }
+                        view=|| {
+                            view! { <Schedule/> }
                         }
                     />
+
                     <Route
                         path="/*any"
-                        view=|cx| {
-                            view! { cx, <h1>"Not Found"</h1> }
+                        view=|| {
+                            view! { <NotFound/> }
                         }
                     />
+
                 </Routes>
             </main>
         </Router>

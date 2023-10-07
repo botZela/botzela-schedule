@@ -3,8 +3,8 @@ use leptos::*;
 use leptos_router::*;
 
 #[component]
-pub fn Header(cx: Scope) -> impl IntoView {
-    let params = use_query::<schedule::PostParams>(cx);
+pub fn Header() -> impl IntoView {
+    let params = use_query::<schedule::PostParams>();
 
     let body = move || {
         params.with(|params| {
@@ -26,7 +26,7 @@ pub fn Header(cx: Scope) -> impl IntoView {
 
     let week_vec = vec!["S16", "S17", "S22"];
 
-    view! { cx,
+    view! {
         <div class="header">
             <img src="/images/ENSIAS.svg" alt="ensias_logo"/>
             <Form method="GET" action="">
@@ -40,8 +40,11 @@ pub fn Header(cx: Scope) -> impl IntoView {
                             {year_vec
                                 .iter()
                                 .map(|&year| {
-                                    view! { cx,
-                                        <option value=year selected=move || body().year == Some(year.to_string())>
+                                    view! {
+                                        <option
+                                            value=year
+                                            selected=move || body().year == Some(year.to_string())
+                                        >
                                             {year}
                                         </option>
                                     }
@@ -52,8 +55,11 @@ pub fn Header(cx: Scope) -> impl IntoView {
                             {fl_vec
                                 .iter()
                                 .map(|&fl| {
-                                    view! { cx,
-                                        <option value=fl selected=move || body().filiere == Some(fl.to_string())>
+                                    view! {
+                                        <option
+                                            value=fl
+                                            selected=move || body().filiere == Some(fl.to_string())
+                                        >
                                             {fl}
                                         </option>
                                     }
@@ -64,8 +70,11 @@ pub fn Header(cx: Scope) -> impl IntoView {
                             {grp_vec
                                 .iter()
                                 .map(|&grp| {
-                                    view! { cx,
-                                        <option value=grp selected=move || body().groupe == Some(grp.to_string())>
+                                    view! {
+                                        <option
+                                            value=grp
+                                            selected=move || body().groupe == Some(grp.to_string())
+                                        >
                                             {grp}
                                         </option>
                                     }
@@ -76,8 +85,11 @@ pub fn Header(cx: Scope) -> impl IntoView {
                             {week_vec
                                 .iter()
                                 .map(|&week| {
-                                    view! { cx,
-                                        <option value=week selected=move || body().week == Some(week.to_string())>
+                                    view! {
+                                        <option
+                                            value=week
+                                            selected=move || body().week == Some(week.to_string())
+                                        >
                                             {week}
                                         </option>
                                     }

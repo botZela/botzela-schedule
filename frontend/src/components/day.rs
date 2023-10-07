@@ -4,10 +4,10 @@ use common::schedule::Seance;
 use leptos::*;
 
 #[component]
-pub fn Day(cx: Scope, day: &'static str, seances: Vec<Option<Seance>>) -> impl IntoView {
+pub fn Day(day: &'static str, seances: Vec<Option<Seance>>) -> impl IntoView {
     let out: Vec<_> = seances
         .iter()
-        .map(|s| view! { cx, <Session session=s/> }.into_view(cx))
+        .map(|s| view! { <Session session=s/> }.into_view())
         .collect();
 
     let mid = out.len() / 2;
@@ -15,17 +15,18 @@ pub fn Day(cx: Scope, day: &'static str, seances: Vec<Option<Seance>>) -> impl I
     let first_half = Vec::from(&out[..mid]);
     let second_half = Vec::from(&out[mid..]);
 
-    view! { cx,
+    view! {
         <tr class="day">
             <td class="day-name">
                 <b>{day}</b>
             </td>
             <Show
                 when=move || SHOW_BRANCH
-                fallback=|_| {
-                    view! { cx,  }
+                fallback=|| {
+                    view! {}
                 }
             >
+
                 <td class="filiere">"SSI"</td>
             </Show>
             {first_half}

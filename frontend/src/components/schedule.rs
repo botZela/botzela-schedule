@@ -6,8 +6,8 @@ use leptos::*;
 use leptos_router::*;
 
 #[component]
-pub fn Schedule(cx: Scope) -> impl IntoView {
-    let params = use_query::<schedule::PostParams>(cx);
+pub fn Schedule() -> impl IntoView {
+    let params = use_query::<schedule::PostParams>();
 
     let body = move || {
         params.with(|params| {
@@ -20,32 +20,24 @@ pub fn Schedule(cx: Scope) -> impl IntoView {
         })
     };
 
-    let once = create_resource(cx, body, |value| async move { fetch_schedule(value).await });
+    let once = create_resource(body, |value| async move { fetch_schedule(value).await });
 
-    view! { cx,
+    view! {
         <div class="container">
             <Header/>
             <Suspense fallback=|| {
-                view! { cx, "Loading..." }
+                view! { "Loading..." }
             }>
-                {move || match once.read(cx) {
-                    None => {
-                        view! { cx, <p>"Loading..."</p> }
-                            .into_view(cx)
-                    }
+                {move || match once.get() {
+                    None => view! { <p>"Loading..."</p> }.into_view(),
                     Some(data) => {
                         match data {
-                            Some(days) => {
-                                view! { cx, <Week days/> }
-                                    .into_view(cx)
-                            }
-                            None => {
-                                view! { cx, "Not Found" }
-                                    .into_view(cx)
-                            }
+                            Some(days) => view! { <Week days/> }.into_view(),
+                            None => view! { "Not Found" }.into_view(),
                         }
                     }
                 }}
+
             </Suspense>
         </div>
     }

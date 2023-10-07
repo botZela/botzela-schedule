@@ -158,13 +158,14 @@
 
           # Extra inputs can be added here
           nativeBuildInputs = with pkgs; [
-            # cargo
-            # rustc
             trunk
             rustToolchain
             dive
             flyctl
             just
+            cargo-edit
+            rust-analyzer
+            leptosfmt
           ];
         };
 

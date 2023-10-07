@@ -8,12 +8,12 @@ edition = "2021"
 [dependencies]
 common = { path = "../common/" }
 
-axum = "0.6.19"
-tokio = { version = "1.29.1", features = ["macros", "rt-multi-thread"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0.103"
-regex = "1.9.1"
-mongodb = "2.6.0"
+axum = "0.6.20"
+tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread"] }
+serde = { version = "1.0.188", features = ["derive"] }
+serde_json = "1.0.107"
+regex = "1.9.6"
+mongodb = "2.7.0"
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
-tower-http = { version = "0.4.2", features = ["cors", "fs", "trace"] }
+tower-http = { version = "0.4.4", features = ["cors", "fs", "trace"] }
