@@ -48,7 +48,7 @@ COPY --from=cacher /app/target target
 COPY --from=cacher /usr/local/cargo /usr/local/cargo
 
 # build the app
-ARG CLIENT_DIST=""
+ARG CLIENT_DIST="/app/dist"
 RUN cargo build --release
 RUN cd frontend && trunk build --release
 
