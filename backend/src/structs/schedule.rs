@@ -12,10 +12,10 @@ impl Merge for Schedule {
             days: self
                 .days
                 .into_iter()
-                .zip(second.days.into_iter())
+                .zip(second.days)
                 .map(|(r, l)| {
                     r.into_iter()
-                        .zip(l.into_iter())
+                        .zip(l)
                         .map(|(x, y)| match (x, y) {
                             (Some(t), None | Some(_)) | (None, Some(t)) => Some(t),
                             _ => None,

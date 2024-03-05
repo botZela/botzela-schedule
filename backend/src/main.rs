@@ -17,10 +17,9 @@ async fn main() {
 
     let app = router(database);
 
-    let addr = "[::]:8080".parse().unwrap();
+    let addr = "[::]:8080";
     tracing::debug!("listening on {}", addr);
-    axum::Server::bind(&addr)
-        .serve(app.into_make_service())
-        .await
-        .unwrap();
+    // run our app with hyper, listening globally on port 3000
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+    axum::serve(listener, app).await.unwrap();
 }
