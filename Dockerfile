@@ -1,6 +1,6 @@
 # create base
 FROM rust:bullseye as base
-RUN rustup default nightly
+# RUN rustup default nightly
 RUN rustup target add wasm32-unknown-unknown
 WORKDIR /app
 RUN cargo install cargo-chef
@@ -20,7 +20,7 @@ RUN cargo chef cook --release --recipe-path recipe.json && \
 # stage 3
 FROM rust:bullseye as builder
 
-RUN rustup default nightly
+# RUN rustup default nightly
 RUN rustup target add wasm32-unknown-unknown
 RUN cargo install trunk 
 RUN cargo install wasm-bindgen-cli
