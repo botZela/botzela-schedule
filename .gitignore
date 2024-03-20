@@ -31,3 +31,4 @@ db
 
 # Nix
 result
+/.pre-commit-config.yaml

@@ -15,6 +15,8 @@
       url = "github:ipetkov/crane";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -23,8 +25,9 @@
     crane,
     flake-utils,
     rust-overlay,
+    pre-commit-hooks,
     ...
-  }:
+  } @ inputs:
     {
       hydraJobs = {
         inherit (self) packages;
@@ -130,6 +133,14 @@
       };
     in {
       checks = {
+        pre-commit-check = pre-commit-hooks.lib.${system}.run {
+          src = ./.;
+          hooks = {
+            alejandra.enable = true;
+            statix.enable = true;
+            typos.enable = true;
+          };
+        };
         # Build the crate as part of `nix flake check` for convenience
         inherit backend frontend;
 
@@ -166,9 +177,13 @@
       devShells.default = pkgs.mkShell {
         inputsFrom = builtins.attrValues self.checks;
 
-        shellHook = ''
-          export CLIENT_DIST=$PWD/frontend/dist;
-        '';
+        shellHook =
+          ''
+            export CLIENT_DIST=$PWD/frontend/dist;
+          ''
+          + self.checks.${system}.pre-commit-check.shellHook;
+
+        buildInputs = self.checks.${system}.pre-commit-check.enabledPackages;
 
         # Extra inputs can be added here
         nativeBuildInputs = with pkgs; [
