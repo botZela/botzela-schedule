@@ -25,7 +25,12 @@
     rust-overlay,
     ...
   }:
-    flake-utils.lib.eachDefaultSystem (system: let
+    {
+      hydraJobs = {
+        inherit (self) packages;
+      };
+    }
+    // flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
         overlays = [(import rust-overlay)];
