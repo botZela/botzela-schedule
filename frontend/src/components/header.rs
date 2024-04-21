@@ -17,14 +17,14 @@ pub fn Header() -> impl IntoView {
         })
     };
 
-    let year_vec = vec!["1A", "2A", "3A"];
+    let year_vec = ["1A", "2A", "3A"];
 
-    let fl_vec = vec![
+    let fl_vec = [
         "2IA", "2SCL", "BI&A", "GD", "GL", "IDF", "IDSIT", "SSI", "SSE",
     ];
-    let grp_vec = vec!["G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"];
+    let grp_vec = ["G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"];
 
-    let week_vec = vec!["S16", "S17", "S22"];
+    let week_vec = ["S16", "S17", "S22"];
 
     view! {
         <div class="header">

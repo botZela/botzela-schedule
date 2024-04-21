@@ -32,7 +32,7 @@ fn WeekHeader() -> impl IntoView {
 
 #[component]
 pub fn Week(days: Vec<Vec<Option<Seance>>>) -> impl IntoView {
-    let days_name = vec!["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+    let days_name = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
 
     let days_view: Vec<_> = days_name
         .iter()
