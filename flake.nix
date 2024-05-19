@@ -2,7 +2,7 @@
   description = "BotZela Schedule Web APP";
 
   inputs = {
-    systems.url = "github:nix-systems/x86_64-linux";
+    systems.url = "github:nix-systems/default-linux";
 
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
