@@ -1,6 +1,5 @@
 use super::day::*;
 use crate::SHOW_BRANCH;
-use common::schedule::Seance;
 use leptos::*;
 
 #[component]
@@ -31,7 +30,7 @@ fn WeekHeader() -> impl IntoView {
 }
 
 #[component]
-pub fn Week(days: Vec<Vec<Option<Seance>>>) -> impl IntoView {
+pub fn Week(days: common::schedule::Days) -> impl IntoView {
     let days_name = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
 
     let days_view: Vec<_> = days_name

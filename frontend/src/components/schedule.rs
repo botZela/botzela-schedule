@@ -29,7 +29,7 @@ pub fn Schedule() -> impl IntoView {
                 view! { "Loading..." }
             }>
                 {move || match once.get() {
-                    None => view! { <p>"Loading..."</p> }.into_view(),
+                    None => view! { <p>"Not Found"</p> }.into_view(),
                     Some(data) => {
                         match data {
                             Some(days) => view! { <Week days/> }.into_view(),

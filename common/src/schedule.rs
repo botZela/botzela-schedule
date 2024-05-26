@@ -20,10 +20,12 @@ pub struct Seance {
     pub other_filieres: Vec<String>,
 }
 
+pub type Days = Vec<Vec<Option<Seance>>>;
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Schedule {
     pub year: String,
     pub filiere: String,
     pub week: Option<String>,
-    pub days: Vec<Vec<Option<Seance>>>,
+    pub days: Days,
 }
