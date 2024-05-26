@@ -121,9 +121,9 @@
           cargoArtifacts = cargoArtifactsWasm;
           trunkIndexPath = "frontend/index.html";
           wasm-bindgen-cli = pkgs.wasm-bindgen-cli.override {
-            version = "0.2.87";
-            hash = "sha256-0u9bl+FkXEK2b54n7/l9JOCtKo+pb42GF9E1EnAUQa0=";
-            cargoHash = "sha256-AsZBtE2qHJqQtuCt/wCAgOoxYMfvDh8IzBPAOkYSYko=";
+            version = "0.2.92";
+            hash = "sha256-1VwY8vQy7soKEgbki4LD+v259751kKxSxmo/gqE6yV0=";
+            cargoHash = "sha256-aACJ+lYNEU8FFBs158G1/JG8sc6Rq080PeKCMnwdpH0=";
           };
         });
 
@@ -192,6 +192,7 @@
 
         # Extra inputs can be added here
         nativeBuildInputs = with pkgs; [
+          pkg-config
           trunk
           rustToolchain
           dive

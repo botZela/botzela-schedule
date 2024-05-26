@@ -1,5 +1,5 @@
 # create base
-FROM rust:bullseye as base
+FROM rust:bookworm as base
 # RUN rustup default nightly
 RUN rustup target add wasm32-unknown-unknown
 WORKDIR /app
@@ -18,7 +18,7 @@ RUN cargo chef cook --release --recipe-path recipe.json && \
   cargo chef cook --release -p front_schedule_leptos --target wasm32-unknown-unknown
 
 # stage 3
-FROM rust:bullseye as builder
+FROM rust:bookworm as builder
 
 # RUN rustup default nightly
 RUN rustup target add wasm32-unknown-unknown
@@ -54,7 +54,7 @@ RUN cd frontend && trunk build --release
 
 # stage 4
 # run the application in smaller container
-FROM gcr.io/distroless/cc-debian11
+FROM gcr.io/distroless/cc-debian12
 
 # Import from builder
 COPY --from=builder /etc/passwd /etc/passwd
