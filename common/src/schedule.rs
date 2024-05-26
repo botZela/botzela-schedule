@@ -2,7 +2,7 @@ use leptos::*;
 use leptos_router::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, PartialEq, Debug, Clone, Params)]
+#[derive(Deserialize, Serialize, PartialEq, Debug, Clone, Params, Default)]
 pub struct PostParams {
     pub year: Option<String>,
     pub filiere: Option<String>,

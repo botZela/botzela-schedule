@@ -2,6 +2,7 @@ use super::header::*;
 use super::week::*;
 use crate::api::fetch_schedule;
 use common::schedule;
+use leptos::logging::log;
 use leptos::*;
 use leptos_router::*;
 
@@ -11,12 +12,13 @@ pub fn Schedule() -> impl IntoView {
 
     let body = move || {
         params.with(|params| {
-            params.clone().unwrap_or(schedule::PostParams {
-                year: Some("1A".to_owned()),
-                filiere: Some("2IA".to_owned()),
-                groupe: Some("G1".to_owned()),
-                week: Some("S22".to_owned()),
-            })
+            let p = params.clone().unwrap_or_default();
+            schedule::PostParams {
+                year: Some(p.year.unwrap_or("1A".to_owned())),
+                filiere: Some(p.filiere.unwrap_or("2IA".to_owned())),
+                groupe: Some(p.groupe.unwrap_or("G1".to_owned())),
+                week: Some(p.week.unwrap_or("S16".to_owned())),
+            }
         })
     };
 
