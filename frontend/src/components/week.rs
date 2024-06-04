@@ -30,8 +30,13 @@ fn WeekHeader() -> impl IntoView {
 }
 
 #[component]
-pub fn Week(days: common::schedule::Days) -> impl IntoView {
+pub fn Week(days: Option<common::schedule::Days>) -> impl IntoView {
     let days_name = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+
+    let days = match days {
+        Some(x) => x,
+        None => vec![vec![None; 4]; 6],
+    };
 
     let days_view: Vec<_> = days_name
         .iter()

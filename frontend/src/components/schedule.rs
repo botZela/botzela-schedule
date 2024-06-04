@@ -28,13 +28,13 @@ pub fn Schedule() -> impl IntoView {
         <div class="container">
             <Header/>
             <Suspense fallback=|| {
-                view! { "Loading..." }
+                view! { <Week days=None/> }
             }>
                 {move || match once.get() {
                     None => view! { <p>"Not Found"</p> }.into_view(),
                     Some(data) => {
                         match data {
-                            Some(days) => view! { <Week days/> }.into_view(),
+                            Some(days) => view! { <Week days=Some(days)/> }.into_view(),
                             None => view! { "Not Found" }.into_view(),
                         }
                     }
