@@ -19,9 +19,9 @@ jobs:
           - name: dockerImage
             platform: x86_64-linux
             fly: true
-          - name: backend
-            platform: x86_64-linux
-            fly: false
+          # - name: backend
+          #   platform: x86_64-linux
+          #   fly: false
 
     steps:
       - uses: actions/checkout@v4
