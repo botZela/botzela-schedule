@@ -18,7 +18,7 @@ jobs:
         app:
           - name: dockerImage
             platform: x86_64-linux
-            fly: false
+            fly: true
           - name: backend
             platform: x86_64-linux
             fly: false
@@ -41,15 +41,8 @@ jobs:
 
       - uses: DeterminateSystems/magic-nix-cache-action@main
 
-      - name: Build Shell
+      - name: Build Package
         run: nix build .#packages.${{ matrix.app.platform }}.${{ matrix.app.name }}
-
-      # Once built, we login to Attic
-      - name: Login to attic
-        run: nix develop .#ci --command attic login cache ${{ secrets.ATTIC_URL }} ${{ secrets.ATTIC_TOKEN }}
-
-      - name: Push Package
-        run: nix develop .#ci --command attic push system result -j 2
 
       - name: Load Image to Docker
         if: matrix.app.name == 'dockerImage'
@@ -60,3 +53,10 @@ jobs:
         run: nix develop .#ci --command fly deploy --local-only -i botzela-schedule-nix
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          
+      # Once built, we login to Attic
+      - name: Login to attic
+        run: nix develop .#ci --command attic login cache ${{ secrets.ATTIC_URL }} ${{ secrets.ATTIC_TOKEN }}
+
+      - name: Push Package
+        run: nix develop .#ci --command attic push system result -j 2
