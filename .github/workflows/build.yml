@@ -1,0 +1,56 @@
+name: "package"
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  nixvim:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      # Here we specify the matrix of our hosts and their target platform architectures
+      matrix:
+        app:
+          - name: dockerImage
+            platform: x86_64-linux
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # We only run this if we are building an aarch64-linux system
+      - if: matrix.app.platform == 'aarch64-linux'
+        uses: docker/setup-qemu-action@v3
+
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          # We add all the config for extra platforms, other binary caches and to raise the number of connections that can be made
+          extra-conf: |
+            fallback = true
+            extra-platforms = aarch64-linux
+            substituters = ${{ secrets.ATTIC_URL }}/system?priority=43 https://nix-community.cachix.org?priority=41 https://numtide.cachix.org?priority=42 https://cache.nixos.org/ https://hyprland.cachix.org
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= system:51hbrsnX2pmCB3z3otgdnt2aq+konejsg/bQ7Qu1W+o= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE= hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=
+
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Build Shell
+        run: nix build .#packages.${{ matrix.app.platform }}.${{ matrix.app.name }}
+
+      # Once built, we login to Attic
+      - name: Login to attic
+        run: nix run nixpkgs#attic-client login cache ${{ secrets.ATTIC_URL }} ${{ secrets.ATTIC_TOKEN }}
+
+      - name: Push Package
+        run: nix run nixpkgs#attic-client push system result -j 2
+
+      - name: Load Image to Docker
+        if: matrix.app.name == 'dockerImage'
+        run: "./result | docker load"
+
+      - name: Docker images
+        if: matrix.app.name == 'dockerImage'
+        run: docker images
