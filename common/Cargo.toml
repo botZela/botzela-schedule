@@ -7,6 +7,6 @@ edition = "2021"
 
 [dependencies]
 serde = { version = "1.0.203", features = ["derive"] }
-serde_json = "1.0.117"
-leptos = "0.6.11"
-leptos_router = "0.6.11"
+serde_json = "1.0.120"
+leptos = "0.6.12"
+leptos_router = "0.6.12"
