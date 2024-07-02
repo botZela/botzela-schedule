@@ -33,12 +33,7 @@
     pre-commit-hooks,
     ...
   } @ inputs:
-    {
-      hydraJobs = {
-        inherit (self) packages;
-      };
-    }
-    // flake-utils.lib.eachDefaultSystem (
+    flake-utils.lib.eachDefaultSystem (
       system: let
         pkgs = import nixpkgs {
           inherit system;
@@ -181,6 +176,8 @@
           # but it's also the default.
           inherit backend dockerImage;
           default = backend;
+          backend-deps = cargoArtifacts;
+          frontend-deps = cargoArtifactsWasm;
         };
 
         devShells.ci = pkgs.mkShell {

@@ -9,7 +9,48 @@ on:
     types: [opened, reopened]
 
 jobs:
+  build-deps:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      # Here we specify the matrix of our hosts and their target platform architectures
+      matrix:
+        dependency:
+          - name: frontend-deps
+            platform: x86_64-linux
+          - name: backend-deps
+            platform: x86_64-linux
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # We only run this if we are building an aarch64-linux system
+      - if: matrix.dependency.platform == 'aarch64-linux'
+        uses: docker/setup-qemu-action@v3
+
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          # We add all the config for extra platforms, other binary caches and to raise the number of connections that can be made
+          extra-conf: |
+            fallback = true
+            extra-platforms = aarch64-linux
+            substituters = ${{ secrets.ATTIC_URL }}/system?priority=43 https://nix-community.cachix.org?priority=41 https://cache.nixos.org/ 
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= system:51hbrsnX2pmCB3z3otgdnt2aq+konejsg/bQ7Qu1W+o= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Build Package
+        run: nix build .#packages.${{ matrix.dependency.platform }}.${{ matrix.dependency.name }}
+
+      # Once built, we login to Attic
+      - name: Login to attic
+        run: nix develop .#ci --command attic login cache ${{ secrets.ATTIC_URL }} ${{ secrets.ATTIC_TOKEN }}
+
+      - name: Push Package
+        run: nix develop .#ci --command attic push system result -j 2
+
   build:
+    needs: build-deps
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
