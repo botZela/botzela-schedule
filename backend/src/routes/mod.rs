@@ -21,8 +21,8 @@ pub fn router(database: mongodb::Database) -> Router {
 
     Router::new()
         .route("/hello", get(root::root))
-        .nest_service("/", ServeDir::new(env!("CLIENT_DIST")))
         .route("/api/schedule", post(schedule::post))
+        .fallback_service(ServeDir::new(env!("CLIENT_DIST")))
         .with_state(database)
         .layer(TraceLayer::new_for_http())
 }

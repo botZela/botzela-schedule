@@ -1,6 +1,6 @@
 use super::day::*;
 use crate::SHOW_BRANCH;
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
 fn WeekHeader() -> impl IntoView {
@@ -34,8 +34,8 @@ pub fn Week(days: Option<common::schedule::Days>) -> impl IntoView {
     let days_name = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
 
     let days = match days {
-        Some(x) => x,
-        None => vec![vec![None; 4]; 6],
+        Some(x) if !x.is_empty() => x,
+        _ => vec![vec![None; 4]; 6],
     };
 
     let days_view: Vec<_> = days_name
@@ -46,18 +46,10 @@ pub fn Week(days: Option<common::schedule::Days>) -> impl IntoView {
 
     view! {
         <div class="body">
-            {if days_view.is_empty() {
-                view! { "Not Found" }.into_view()
-            } else {
-                view! {
-                    <table>
-                        <WeekHeader/>
-                        {days_view}
-                    </table>
-                }
-                    .into_view()
-            }}
-
+            <table>
+                <WeekHeader/>
+                {days_view}
+            </table>
         </div>
     }
 }

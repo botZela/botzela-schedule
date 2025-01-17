@@ -110,19 +110,32 @@
 
         # Build the frontend of the application.
         # This derivation is a directory you can put on a webserver.
-        frontend = craneLib.buildTrunkPackage (
-          wasmArgs
+        frontend = craneLib.buildTrunkPackage (wasmArgs
           // {
             pname = "front_schedule_leptos";
             cargoArtifacts = cargoArtifactsWasm;
-            trunkIndexPath = "frontend/index.html";
+            # Trunk expects the current directory to be the crate to compile
+            preBuild = ''
+              cd ./frontend
+            '';
+            # After building, move the `dist` artifacts and restore the working directory
+            postBuild = ''
+              mv ./dist ..
+              cd ..
+            '';
+            # The version of wasm-bindgen-cli here must match the one from Cargo.lock.
             wasm-bindgen-cli = pkgs.wasm-bindgen-cli.override {
-              version = "0.2.92";
-              hash = "sha256-1VwY8vQy7soKEgbki4LD+v259751kKxSxmo/gqE6yV0=";
-              cargoHash = "sha256-aACJ+lYNEU8FFBs158G1/JG8sc6Rq080PeKCMnwdpH0=";
+              version = "0.2.100";
+              hash = "sha256-3RJzK7mkYFrs7C/WkhW9Rr4LdP5ofb2FdYGz1P7Uxog=";
+              cargoHash = "sha256-tD0OY2PounRqsRiFh8Js5nyknQ809ZcHMvCOLrvYHRE=";
+              # When updating to a new version comment out the above two lines and
+              # uncomment the bottom two lines. Then try to do a build, which will fail
+              # but will print out the correct value for `hash`. Replace the value and then
+              # repeat the process but this time the printed value will be for `cargoHash`
+              # hash = lib.fakeHash;
+              # cargoHash = lib.fakeHash;
             };
-          }
-        );
+          });
 
         # Create Docker Image with Nix
         dockerImage = pkgs.dockerTools.streamLayeredImage {

@@ -32,10 +32,10 @@ pub async fn fetch(database: &Database, payload: &PostParams) -> Option<Schedule
     let collection = database.collection::<Schedule>("ensias-schedules");
 
     let filter = doc! { "year": &payload.year, "filiere": &payload.filiere, "week": &payload.week};
-    let fl = collection.find_one(filter, None).await.unwrap_or(None);
+    let fl = collection.find_one(filter).await.unwrap_or(None);
 
     let filter = doc! { "year": &payload.year, "filiere": &payload.groupe, "week": &payload.week};
-    let grp = collection.find_one(filter, None).await.unwrap_or(None);
+    let grp = collection.find_one(filter).await.unwrap_or(None);
 
     match (fl, grp) {
         (Some(fl), Some(grp)) => Some(fl.merge(grp)),

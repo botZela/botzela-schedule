@@ -2,9 +2,8 @@ use super::header::*;
 use super::week::*;
 use crate::api::fetch_schedule;
 use common::schedule;
-use leptos::logging::log;
-use leptos::*;
-use leptos_router::*;
+use leptos::prelude::*;
+use leptos_router::hooks::use_query;
 
 #[component]
 pub fn Schedule() -> impl IntoView {
@@ -22,25 +21,18 @@ pub fn Schedule() -> impl IntoView {
         })
     };
 
-    let once = create_resource(body, |value| async move { fetch_schedule(value).await });
+    let async_data = LocalResource::new(move || fetch_schedule(body()));
 
     view! {
         <div class="container">
             <Header/>
-            <Suspense fallback=|| {
-                view! { <Week days=None/> }
-            }>
-                {move || match once.get() {
-                    None => view! { <p>"Not Found"</p> }.into_view(),
-                    Some(data) => {
-                        match data {
-                            Some(days) => view! { <Week days=Some(days)/> }.into_view(),
-                            None => view! { "Not Found" }.into_view(),
-                        }
-                    }
-                }}
-
-            </Suspense>
+            <Transition
+                fallback=move || { view! { <Week days=None/> } }
+            >
+                {move || Suspend::new(async move {
+                    view! { <Week days={async_data.await}/> }.into_any()
+                })}
+            </Transition>
         </div>
     }
 }

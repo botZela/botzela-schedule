@@ -1,24 +1,24 @@
 # create base
-FROM rust:bookworm as base
+FROM rust:bookworm AS base
 # RUN rustup default nightly
 RUN rustup target add wasm32-unknown-unknown
 WORKDIR /app
 RUN cargo install cargo-chef
 
 # stage 1
-FROM base as planner
+FROM base AS planner
 COPY . .
 RUN cargo chef prepare --recipe-path recipe.json
 
 
 # stage 2 
-FROM base as cacher
+FROM base AS cacher
 COPY --from=planner /app/recipe.json /app/recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json && \
   cargo chef cook --release -p front_schedule_leptos --target wasm32-unknown-unknown
 
 # stage 3
-FROM rust:bookworm as builder
+FROM rust:bookworm AS builder
 
 # RUN rustup default nightly
 RUN rustup target add wasm32-unknown-unknown

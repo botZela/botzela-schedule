@@ -1,5 +1,5 @@
-use leptos::*;
-use leptos_router::*;
+use leptos::prelude::*;
+use leptos_router::params::Params;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, PartialEq, Debug, Clone, Params, Default)]

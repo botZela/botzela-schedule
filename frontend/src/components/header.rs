@@ -1,6 +1,7 @@
 use common::schedule;
-use leptos::*;
-use leptos_router::*;
+use leptos::prelude::*;
+use leptos_router::components::Form;
+use leptos_router::hooks::use_query;
 
 #[component]
 pub fn Header() -> impl IntoView {

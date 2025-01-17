@@ -1,19 +1,17 @@
 use super::session::*;
 use crate::SHOW_BRANCH;
 use common::schedule::Seance;
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
 pub fn Day(day: &'static str, seances: Vec<Option<Seance>>) -> impl IntoView {
-    let out: Vec<_> = seances
-        .iter()
-        .map(|s| view! { <Session session=s/> }.into_view())
+    let mid = seances.len() / 2;
+    let mut first_half: Vec<_> = seances
+        .into_iter()
+        .map(|s| view! { <Session session=s/> }.into_any())
         .collect();
 
-    let mid = out.len() / 2;
-
-    let first_half = Vec::from(&out[..mid]);
-    let second_half = Vec::from(&out[mid..]);
+    let second_half = first_half.split_off(mid);
 
     view! {
         <tr class="day">
